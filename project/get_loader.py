@@ -5,7 +5,7 @@ import torch
 from torch.nn.utils.rnn import pad_sequence  # pad batch
 from torch.utils.data import DataLoader, Dataset
 from PIL import Image  # Load img
-# import en_core_web_sm
+import en_core_web_sm
 import torchvision.transforms as transforms
 
 
@@ -17,8 +17,7 @@ import torchvision.transforms as transforms
 # Note that loading the image is very easy compared to the text!
 
 # Download with: python -m spacy download en
-spacy_eng = spacy.load("en")
-# spacy_eng = en_core_web_sm.load()
+spacy_eng = en_core_web_sm.load()
 
 class Vocabulary:
     def __init__(self, freq_threshold):
@@ -59,10 +58,10 @@ class Vocabulary:
         ]
 
 
-class FlickrDataset(Dataset):
+class CocoDataset(Dataset):
     def __init__(self, root_dir, captions_file, transform=None, freq_threshold=5):
         self.root_dir = root_dir
-        self.df = pd.read_csv(captions_file)
+        self.df = pd.read_csv(captions_file, error_bad_lines = False)
         self.transform = transform
 
         # Get img, caption columns
@@ -113,11 +112,11 @@ def get_loader(
     shuffle=True,
     pin_memory=True,
 ):
-    dataset = FlickrDataset(root_folder, annotation_file, transform=transform)
+    dataset = CocoDataset(root_folder, annotation_file, transform=transform)
 
     pad_idx = dataset.vocab.stoi["<PAD>"]
 
-    loader = DataLoader(
+    train_loader = DataLoader(
         dataset=dataset,
         batch_size=batch_size,
         num_workers=num_workers,
@@ -125,8 +124,8 @@ def get_loader(
         pin_memory=pin_memory,
         collate_fn=MyCollate(pad_idx=pad_idx),
     )
-
-    return loader, dataset
+    
+    return train_loader, dataset
 
 
 if __name__ == "__main__":
@@ -135,7 +134,7 @@ if __name__ == "__main__":
     )
 
     loader, dataset = get_loader(
-        "flickr8k/images/", "flickr8k/captions.txt", transform=transform
+        "images/", "captions.txt", transform=transform
     )
 
     for idx, (imgs, captions) in enumerate(loader):

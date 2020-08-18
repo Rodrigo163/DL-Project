@@ -29,7 +29,7 @@ def print_examples(model, device, dataset):
         "Example 2 OUTPUT: "
         + " ".join(model.caption_image(test_img2.to(device), dataset.vocab))
     )
-    test_img3 = transform(Image.open("data/test_examples/bus.png").convert("RGB")).unsqueeze(
+    test_img3 = transform(Image.open("data/test_examples/bus.jpg").convert("RGB")).unsqueeze(
         0
     )
     print("Example 3 CORRECT: Bus driving by parked cars")
@@ -38,7 +38,7 @@ def print_examples(model, device, dataset):
         + " ".join(model.caption_image(test_img3.to(device), dataset.vocab))
     )
     test_img4 = transform(
-        Image.open("data/test_examples/boat.png").convert("RGB")
+        Image.open("data/test_examples/boat.jpg").convert("RGB")
     ).unsqueeze(0)
     print("Example 4 CORRECT: A small boat in the ocean")
     print(
@@ -46,7 +46,7 @@ def print_examples(model, device, dataset):
         + " ".join(model.caption_image(test_img4.to(device), dataset.vocab))
     )
     test_img5 = transform(
-        Image.open("data/test_examples/horse.png").convert("RGB")
+        Image.open("data/test_examples/horse.jpg").convert("RGB")
     ).unsqueeze(0)
     print("Example 5 CORRECT: A cowboy riding a horse in the desert")
     print(

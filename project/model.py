@@ -27,17 +27,34 @@ import torchvision.models as models
 #         return self.dropout(self.relu(features))
     
     
+class EncoderCNN(nn.Module):
+#     def __init__(self, embed_size, train_CNN=False):
+#         super(EncoderCNN, self).__init__()
+#         self.train_CNN = train_CNN
+#         self.resnet = models.resnet50(pretrained=True)
+#         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, embed_size)
+#         self.relu = nn.ReLU()
+#         self.times = []
+#         self.dropout = nn.Dropout(0.5)
+#         self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
     
-  class EncoderCNN(nn.Module):
-    def __init__(self, embed_size, train_CNN=False):
+    def __init__(self, embed_size):
+        
         super(EncoderCNN, self).__init__()
-        self.train_CNN = train_CNN
-        self.resnet = models.resnet50(pretrained=True)
-        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, embed_size)
-        self.relu = nn.ReLU()
-        self.times = []
-        self.dropout = nn.Dropout(0.5)
-
+        resnet = models.resnet152(pretrained=True)
+        modules = list(resnet.children())[:-1]      # delete the last fc layer.
+        self.resnet = nn.Sequential(*modules)
+        self.linear = nn.Linear(resnet.fc.in_features, embed_size)
+        self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
+        
+        
+    def forward(self, images):
+        
+        with torch.no_grad():
+            features = self.resnet(images)
+        features = features.reshape(features.size(0), -1)
+        features = self.bn(self.linear(features))
+        return features
 
 class DecoderRNN(nn.Module):
     def __init__(self, embed_size, hidden_size, vocab_size, num_layers):

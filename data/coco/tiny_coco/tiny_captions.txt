@@ -1,5 +1,0 @@
-image,caption
-COCO_train2017_000000203564.jpg,A bicycle replica with a clock as the front wheel.
-COCO_train2017_000000322141.jpg,A room with blue walls and a white sink and door.
-COCO_train2017_000000016977.jpg,A car that seems to be parked illegally behind a legally parked car
-COCO_train2017_000000106140.jpg,A large passenger airplane flying through the air.
