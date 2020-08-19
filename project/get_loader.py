@@ -30,7 +30,7 @@ class Vocabulary:
 
     @staticmethod
     def tokenizer_eng(text):
-        return [tok.text.lower() for tok in spacy_eng.tokenizer(text)]
+        return [tok.text.lower() for tok in spacy_eng.tokenizer(str(text))]
 
     def build_vocabulary(self, sentence_list):
         frequencies = {}
@@ -61,7 +61,7 @@ class Vocabulary:
 class CocoDataset(Dataset):
     def __init__(self, root_dir, captions_file, transform=None, freq_threshold=5):
         self.root_dir = root_dir
-        self.df = pd.read_csv(captions_file, error_bad_lines = False)
+        self.df = pd.read_csv(captions_file, sep = "\t")
         self.transform = transform
 
         # Get img, caption columns
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     )
 
     loader, dataset = get_loader(
-        "images/", "captions.txt", transform=transform
+        "images/", "Captiones.txt", transform=transform
     )
 
     for idx, (imgs, captions) in enumerate(loader):

@@ -36,7 +36,7 @@ def train():
 
     train_loader, dataset = get_loader(
         root_folder=d+"/project/data/images",
-        annotation_file=d+"/project/data/captions.txt",
+        annotation_file=d+"/project/data/Captiones.txt",
         transform=transform,
         num_workers=0,
     )
@@ -50,7 +50,7 @@ def train():
     torch.backends.cudnn.benchmark = True
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     load_model = False
-    save_model =True
+    save_model = True
     train_CNN = False
 
     # Hyperparameters

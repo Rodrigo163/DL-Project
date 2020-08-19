@@ -35,8 +35,8 @@ def train():
     ])
 
     train_loader, dataset = get_loader(
-        root_folder=d+"/project/data/tiny_coco/images",
-        annotation_file=d+"/project/data/tiny_coco/captions.txt",
+        root_folder=d+"/project/data/images",
+        annotation_file=d+"/project/data/Captiones.txt",
         transform=transform,
         num_workers=0,
     )
@@ -54,16 +54,16 @@ def train():
     train_CNN = False
 
     # Hyperparameters
-    embed_size = 5
-    hidden_size = 5
+    embed_size = 256
+    hidden_size = 256
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
     num_epochs = 1
 
     # for tensorboard
-    writer = SummaryWriter("runs/coco")
-    step = 0
+    #writer = SummaryWriter("runs/coco")
+    #step = 0
 
     # initialize model, loss etc
     model = CNNtoRNN(embed_size, hidden_size, vocab_size, num_layers).to(device)
@@ -106,8 +106,8 @@ def train():
             
             #losses.append(loss.item())
 
-            writer.add_scalar("Training loss", loss.item(), global_step=step)
-            step += 1
+            #writer.add_scalar("Training loss", loss.item(), global_step=step)
+            #step += 1
 
             optimizer.zero_grad()
             loss.backward(loss)
