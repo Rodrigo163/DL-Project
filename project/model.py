@@ -2,42 +2,9 @@ import torch
 import torch.nn as nn
 import statistics
 import torchvision.models as models
-
-
-# class EncoderCNN(nn.Module):
-#     def __init__(self, embed_size, train_CNN=False):
-#         super(EncoderCNN, self).__init__()
-#         self.train_CNN = train_CNN
-#         self.inception = models.inception_v3(pretrained=True, aux_logits=False)
-#         self.inception.fc = nn.Linear(self.inception.fc.in_features, embed_size)
-#         self.relu = nn.ReLU()
-#         self.times = []
-#         self.dropout = nn.Dropout(0.5)
-
-#     def forward(self, images):
-#         features = self.inception(images)
-
-#         for name, param in self.inception.named_parameters():
-#             if "fc.weight" in name or "fc.bias" in name:
-#                 param.requires_grad = True
-
-#             else:
-#                 param.requires_grad = False
-
-#         return self.dropout(self.relu(features))
-    
-    
+ 
 class EncoderCNN(nn.Module):
-#     def __init__(self, embed_size, train_CNN=False):
-#         super(EncoderCNN, self).__init__()
-#         self.train_CNN = train_CNN
-#         self.resnet = models.resnet50(pretrained=True)
-#         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, embed_size)
-#         self.relu = nn.ReLU()
-#         self.times = []
-#         self.dropout = nn.Dropout(0.5)
-#         self.bn = nn.BatchNorm1d(embed_size, momentum=0.01)
-    
+
     def __init__(self, embed_size):
         
         super(EncoderCNN, self).__init__()

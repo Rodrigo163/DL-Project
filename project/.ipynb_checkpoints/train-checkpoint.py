@@ -17,15 +17,6 @@ d = os.path.dirname(os.getcwd())
 
 def train():
 
-#     transform = transforms.Compose(
-#         [
-#             transforms.Resize((356, 356)),
-#             transforms.RandomCrop((299, 299)),
-#             transforms.ToTensor(),
-#             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-#         ]
-#     )
-
     #normalization for resnet
     transform = transforms.Compose([
         transforms.Resize(256),
