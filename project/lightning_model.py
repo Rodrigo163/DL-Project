@@ -26,17 +26,13 @@ class pl_version(pl.LightningModule):
                 num_layers,
                 root_folder,
                 annotation_file,
-                dataset,
-                learning_rate,
-                batch_size,
-                num_workers,
-                shuffle):
+                dataset):
+
         super(pl_version, self).__init__()
         self.dataset = dataset
-        self.learning_rate = learning_rate
 
         # Encoder CNN
-        resnet = models.resnet50(pretrained=True)
+        resnet = models.resnet18(pretrained=True)
         modules = list(resnet.children())[:-1]      # delete the last fc layer.
         self.resnet = nn.Sequential(*modules)
         self.linear1 = nn.Linear(resnet.fc.in_features, embed_size)
@@ -87,29 +83,29 @@ class pl_version(pl.LightningModule):
 
 #======================================================
 # DATA
-    def train_dataloader(self):
-        return DataLoader(self.dataset,
-        batch_size = batch_size,
-        pin_memory = True,
-        num_workers = num_workers,
-        shuffle = shuffle,
-        collate_fn = MyCollate(pad_idx = pad_idx),
-        )
+#    def train_dataloader(self):
+#        return DataLoader(dataset = self.dataset,
+#        batch_size = self.batch_size,
+#        pin_memory = True,
+#        num_workers = self.num_workers,
+#        shuffle = self.shuffle,
+#        collate_fn = MyCollate(pad_idx = self.pad_idx),
+#        )
 
 
 #======================================================
 
 #======================================================
 # OPTIMIZER
-    def get_optimizers(self):
-        optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
+    def configure_optimizers(self):
+        optimizer = optim.Adam(self.parameters(), lr=3e-4)
         return optimizer
 #======================================================
 
 #======================================================
 # LOSS
     def cross_entropy_loss(self):
-        return nn.CrossEntropyLoss(ignore_index=dataset.vocab.stoi["<PAD>"])
+        return nn.CrossEntropyLoss(ignore_index=self.dataset.vocab.stoi["<PAD>"])
 
 #======================================================
 
@@ -121,7 +117,8 @@ class pl_version(pl.LightningModule):
 
         #Forward pass
         outputs = self.forward(imgs, captions[:-1])
-        loss = self.cross_entropy_loss(outputs.reshape(-1, outputs.shape[2]), captions.reshape(-1))
+        loss = self.cross_entropy_loss()
+        loss = loss(outputs.reshape(-1, outputs.shape[2]), captions.reshape(-1))
         result = pl.TrainResult(loss)
         return result
 #======================================================
