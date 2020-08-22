@@ -14,6 +14,39 @@ from torch.utils.data import DataLoader, Dataset
 from PIL import Image  # Load img
 import torchvision.transforms as transforms
 
+#======================================================
+#Data Module
+class CocoDataModule(pl.LightningDataModule):
+
+    def __init__(self, dataset,
+                        batch_size,
+                        transform,
+                        num_workers,
+                        ):
+
+        super().__init__()
+        self.dataset = dataset
+        self.batch_size = batch_size
+        self.transform = transform
+
+        self.root_folder = os.path.dirname(os.getcwd())+"/project/data/images"
+        self.annotation_file = os.path.dirname(os.getcwd())+ "/project/data/Captiones.tsv"
+
+
+    def train_dataloader(self):
+        return DataLoader(dataset = self.dataset,
+        batch_size = self.batch_size,
+        pin_memory = True,
+        num_workers = self.num_workers,
+        shuffle = True,
+        collate_fn = MyCollate(pad_idx = 0),
+        )
+
+#======================================================
+
+#======================================================
+
+
 class pl_version(pl.LightningModule):
 
 #======================================================
@@ -21,11 +54,9 @@ class pl_version(pl.LightningModule):
 
     def __init__(self,
                 embed_size,
-                hidden_size, 
+                hidden_size,
                 vocab_size,
                 num_layers,
-                root_folder,
-                annotation_file,
                 dataset):
 
         super(pl_version, self).__init__()
@@ -82,15 +113,8 @@ class pl_version(pl.LightningModule):
 #======================================================
 
 #======================================================
-# DATA
-#    def train_dataloader(self):
-#        return DataLoader(dataset = self.dataset,
-#        batch_size = self.batch_size,
-#        pin_memory = True,
-#        num_workers = self.num_workers,
-#        shuffle = self.shuffle,
-#        collate_fn = MyCollate(pad_idx = self.pad_idx),
-#        )
+#DATA
+
 
 
 #======================================================
